@@ -29,9 +29,17 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpGet("restaurantes")]
-        public IEnumerable<Prato> GetPratosRestaurantes()
+        public async Task<IEnumerable<Prato>> GetPratosRestaurantes()
         {
-            return _pratoService.GetAllPratosRestaurante();
+           var pratosAndRestaurantes = await _pratoService.GetAllPratosAndRestaurantes();
+            return pratosAndRestaurantes;
+        }
+
+        [HttpGet("pratos_infos")]
+        public async Task<ActionResult<IEnumerable<Prato>>> GetPratos(string? tag, string? ordering, string? search, int? page)
+        {
+            var pratos = await _pratoService.GetPratos(tag, ordering, search, page);
+            return Ok(pratos);
         }
 
         [HttpGet]

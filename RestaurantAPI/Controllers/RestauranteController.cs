@@ -41,7 +41,7 @@ namespace RestaurantAPI.Controllers
         [HttpGet("pratos")]
         public IEnumerable<Restaurante> GetPratosRestaurantes()
         {
-            return _restauranteService.GetAllPratosRestaurante();
+            return _restauranteService.GetAllRestaurantesAndPratos();
         }
     }
        

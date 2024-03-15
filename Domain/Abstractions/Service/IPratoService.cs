@@ -18,6 +18,8 @@ namespace Domain.Abstractions.Service
 
         Task<Prato?> Delete(int id);
 
-        IEnumerable<Prato> GetAllPratosAndRestaurantes();
+        Task<IEnumerable<Prato?>> GetAllPratosAndRestaurantes();
+        Task<IEnumerable<Prato>> GetPratos(string? tag, string? ordering, string? search, int? page);
+
     }
 }

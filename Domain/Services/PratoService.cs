@@ -27,9 +27,41 @@ namespace Domain.Services
             await _context.SaveChangesAsync();
             return prato;
         }
-        public IEnumerable<Prato> GetAllPratosAndRestaurantes()
+        public async Task<IEnumerable<Prato>> GetPratos(string? tag, string? ordering, string? search, int? page)
         {
-            return _context.Pratos.Include(p => p.Restaurante).Where(r=>r.Id<=10).AsNoTracking().ToList();
+            var query = _context.Pratos.AsQueryable();
+
+            if (!string.IsNullOrEmpty(tag))
+            {
+                query = query.Where(p => p.Tag == tag);
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(p => p.Nome.Contains(search));
+            }
+            if (!string.IsNullOrEmpty(ordering))
+            {
+                switch (ordering)
+                {
+                    //Ordenando por descendente o nome
+                    case "name":
+                        query = query.OrderBy(p => p.Nome);
+                        break;
+                }
+            }
+            if (page.HasValue)
+            {
+                int pageSize = 20;
+                query = query.Skip((page.Value - 1) * pageSize).Take(pageSize);
+            }
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Prato?>> GetAllPratosAndRestaurantes()
+        {
+            var pratosAndRestaurante = await _context.Pratos.Include(p => p.Restaurante).Where(r => r.Id <= 10).AsNoTracking().ToListAsync();
+            return pratosAndRestaurante;
         }
 
         public async Task<IEnumerable<Prato>> GetAllPratosAsync()
@@ -82,7 +114,7 @@ namespace Domain.Services
 
         public async Task<Prato?> Delete(int id)
         {
-            var pratoToDelete = await _context.Pratos.FirstOrDefaultAsync(p => p.Id == id) ;
+            var pratoToDelete = await _context.Pratos.FirstOrDefaultAsync(p => p.Id == id);
             if (pratoToDelete is null)
             {
                 return null;
@@ -90,7 +122,7 @@ namespace Domain.Services
             _context.Pratos.Remove(pratoToDelete);
             await _context.SaveChangesAsync();
 
-           return pratoToDelete;
+            return pratoToDelete;
         }
     }
 }
