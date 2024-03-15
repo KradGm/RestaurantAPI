@@ -27,7 +27,7 @@ namespace Domain.Services
             await _context.SaveChangesAsync();
             return prato;
         }
-        public IEnumerable<Prato> GetAllPratosRestaurante()
+        public IEnumerable<Prato> GetAllPratosAndRestaurantes()
         {
             return _context.Pratos.Include(p => p.Restaurante).Where(r=>r.Id<=10).AsNoTracking().ToList();
         }

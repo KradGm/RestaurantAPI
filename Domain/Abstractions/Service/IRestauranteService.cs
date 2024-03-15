@@ -1,9 +1,6 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Domain.Abstractions.Service
 {
@@ -11,7 +8,11 @@ namespace Domain.Abstractions.Service
     {
         Task<IEnumerable<Restaurante>> GetAllRestaurantesAsync();
         Task<Restaurante?> GetRestauranteByIdAsync(int id);
-        IEnumerable<Restaurante> GetAllPratosRestaurante();
+        IEnumerable<Restaurante> GetAllRestaurantesAndPratos();
+        Task<Restaurante?> Update(int id, Restaurante restaurante);
+        Task<Restaurante?> Delete(int id);
+        Task<Restaurante?> Patch(int id, JsonPatchDocument restaurantPatch, ModelStateDictionary modelState);
+        Task<Restaurante?> Create(Restaurante restaurante);
 
     }
 }
