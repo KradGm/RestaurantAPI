@@ -23,9 +23,16 @@ namespace RestaurantAPI.Controllers
             {
                 return BadRequest("Há algo errado na criação do produto");
             }
-            await _pratoService.Create(prato);
 
-            return new CreatedAtRouteResult("ObterProduto", new { id = prato.Id }, prato);
+            try
+            {
+                await _pratoService.Create(prato);
+                return new CreatedAtRouteResult("ObterProduto", new { id = prato.Id }, prato);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro interno.");
+            }
         }
 
         [HttpGet("restaurantes")]

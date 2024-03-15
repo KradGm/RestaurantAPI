@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Domain.Abstractions.Service
@@ -10,7 +11,7 @@ namespace Domain.Abstractions.Service
 
         Task<Prato?> GetPratoByIdAsync(int id);
 
-        Task<Prato?> Create(Prato prato);
+        Task<ActionResult<Prato>> Create(Prato prato);
 
         Task<Prato?> Update(int id, Prato prato);
 

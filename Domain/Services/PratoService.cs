@@ -1,6 +1,8 @@
 ﻿using Domain.Abstractions.Data;
 using Domain.Abstractions.Service;
 using Domain.Entities;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -17,15 +19,18 @@ namespace Domain.Services
             _context = context;
         }
 
-        public async Task<Prato?> Create(Prato prato)
+        public async Task<ActionResult<Prato>> Create(Prato prato)
         {
-            if (prato == null)
+            try
             {
-                return null;
+                _context.Pratos.Add(prato);
+                await _context.SaveChangesAsync();
+                return prato;
             }
-            _context.Pratos.Add(prato);
-            await _context.SaveChangesAsync();
-            return prato;
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
         public async Task<IEnumerable<Prato>> GetPratos(string? tag, string? ordering, string? search, int? page)
         {
